@@ -1,0 +1,46 @@
+form {
+    text-align: start;
+}
+
+input {
+    width: 100%;
+}
+
+button {
+    margin: 1rem;
+}
+
+.login {
+    display: inline-block;
+    scale: 100% 100%;
+    transform-origin: left;
+    transition: scale 0.5s;
+}
+
+.signup {
+    position: fixed;
+    top: 115px;
+    scale: 100% 100%;
+    transform-origin: right;
+    transition: scale 0.5s;
+}
+
+.minimize {
+    scale: 0 100%;
+}
+
+.container {
+    height: 100vh;
+    width: 100vw;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.error-msg {
+    color: #800800;
+    display: none;
+}
+
+.show {
+    display: block;
+}

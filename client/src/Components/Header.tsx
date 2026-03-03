@@ -1,0 +1,32 @@
+const Header = () => {
+
+    const handleMenuButtonClick = () => {
+        document.querySelector('.dropdown')?.classList.toggle('active');
+        document.querySelectorAll('.hamburger-bar').forEach((item) => { item.classList.toggle('close') })
+    }
+    return (
+        <header>
+            <nav className="navbar">
+                <div className="logo">
+                    <a href="/">🍿</a>
+                </div>
+                <nav>
+                    <button className="btn-menu" onClick={handleMenuButtonClick}>
+                        <div className="hamburger-bar bar-1"></div>
+                        <div className="hamburger-bar bar-2"></div>
+                        <div className="hamburger-bar bar-3"></div>
+                    </button>
+                </nav>
+            </nav>
+            <div className="dropdown">
+                <ul>
+                    <li><a href="#">Past Films</a></li>
+                    <li><a href="#">Current Discussion</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+            </div>
+        </header>
+    )
+}
+
+export default Header
