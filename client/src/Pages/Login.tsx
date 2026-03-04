@@ -1,5 +1,4 @@
 import { useState } from "react"
-import "./Login.css"
 
 const Login = () => {
     const [loginData, setLoginData] = useState({

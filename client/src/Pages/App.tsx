@@ -16,6 +16,7 @@ function App() {
       <p className="welcome">Welcome back, NAME</p>
       <img src={bannerUrl} />
       <h2>Film for the week of {currentWeek}</h2>
+      <h3>Selected by NAME</h3>
       <h3>"Film Title"</h3>
       <p>Released {movie.year}</p>
       <img src={movie.img} />

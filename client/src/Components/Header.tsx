@@ -1,3 +1,5 @@
+import './Header.css'
+
 const Header = () => {
 
     const handleMenuButtonClick = () => {
@@ -6,7 +8,7 @@ const Header = () => {
     }
     return (
         <header>
-            <nav className="navbar">
+            <div className="navbar">
                 <div className="logo">
                     <a href="/">🍿</a>
                 </div>
@@ -17,11 +19,12 @@ const Header = () => {
                         <div className="hamburger-bar bar-3"></div>
                     </button>
                 </nav>
-            </nav>
+            </div>
             <div className="dropdown">
                 <ul>
                     <li><a href="#">Past Films</a></li>
                     <li><a href="#">Current Discussion</a></li>
+                    <li><a href="/search">Search</a></li>
                     <li><a href="/login">Login</a></li>
                 </ul>
             </div>

@@ -1,0 +1,32 @@
+.container {
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+form {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+p {
+    text-align: center;
+}
+
+.card {
+    box-sizing: border-box;
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.results {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-buttons {
+    display: flex;
+    justify-content: space-evenly;
+}

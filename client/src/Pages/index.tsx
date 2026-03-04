@@ -1,3 +1,5 @@
 import Login from './Login'
+import Search from './Search'
+import App from './App'
 
-export { Login }
+export { App, Login, Search }
