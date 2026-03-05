@@ -1,4 +1,5 @@
 import { useState } from "react"
+import "./Login.css"
 
 const Login = () => {
     const [loginData, setLoginData] = useState({
@@ -29,25 +30,33 @@ const Login = () => {
         })
     }
 
-    const handleLoginSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleLoginSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(`
-            user logged in!
-            Username: ${loginData.username}
-            Password: ${loginData.password}
-            `)
+        const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ...loginData })
+            });
+        const data = await response.json();
+        localStorage.setItem('user', JSON.stringify(data.user))
         location.href = '/'
     }
 
-    const handleSignupSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleSignupSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (signupData.password === signupData.verification) {
-            console.log(`
-            user signed up!
-            Email: ${signupData.email}
-            Username: ${signupData.username}
-            Password: ${signupData.password}
-            `)
+            const response = await fetch('/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ...signupData })
+            });
+            const data = await response.json()
+            localStorage.setItem('user', JSON.stringify(data.user))
+            console.log(data)
         } else {
             document.querySelector('.error-msg')?.classList.add('show')
         }
@@ -59,7 +68,7 @@ const Login = () => {
     }
 
     return (
-        <div className="container">
+        <div className="login-container">
             <form className="login" onSubmit={handleLoginSubmit} >
                 <fieldset>
                     <legend>Log In</legend>

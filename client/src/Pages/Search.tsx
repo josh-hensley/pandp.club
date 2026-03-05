@@ -1,14 +1,14 @@
 import './Search.css'
 import { useState } from 'react'
 import { MovieCard } from '../Components';
-import type { IMovie, queryResponse, pageData } from '../Interfaces';
+import type { IMovie, IQueryResponse, IPageData } from '../Interfaces';
 
 const TMDB_KEY = import.meta.env.VITE_TMDB_KEY
 
 const Search = () => {
     const [search, setSearch] = useState("")
     const [movies, setMovies] = useState<IMovie[]>([])
-    const [pageData, setPageData] = useState<pageData>()
+    const [pageData, setPageData] = useState<IPageData>()
     const baseUrl = "https://api.themoviedb.org/3/search/movie?query="
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +26,7 @@ const Search = () => {
                 authorization: `Bearer ${TMDB_KEY}`
             }
         });
-        const data: queryResponse = await response.json();
+        const data: IQueryResponse = await response.json();
         const { results, total_pages, total_results, page } = data;
         setMovies(results);
         setPageData({ total_pages, total_results, page })

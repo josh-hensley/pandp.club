@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import './index.css'
 import { Header, Footer } from './Components'
-import { Login, Search, App } from './Pages'
+import { Login, Search, App, Queue, Past } from './Pages'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -11,6 +11,8 @@ createRoot(document.getElementById('root')!).render(
       <Route index element={<App />} />
       <Route path='/login' element={<Login />} />
       <Route path='/search' element={<Search />} />
+      <Route path='/queue' element={<Queue />} />
+      <Route path='/past' element={<Past />} />
     </Routes>
     <Footer />
   </BrowserRouter>

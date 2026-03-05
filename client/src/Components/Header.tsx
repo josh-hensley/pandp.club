@@ -22,8 +22,8 @@ const Header = () => {
             </div>
             <div className="dropdown">
                 <ul>
-                    <li><a href="#">Past Films</a></li>
-                    <li><a href="#">Current Discussion</a></li>
+                    <li><a href="/past">Past Films</a></li>
+                    <li><a href="/queue">View Queue</a></li>
                     <li><a href="/search">Search</a></li>
                     <li><a href="/login">Login</a></li>
                 </ul>

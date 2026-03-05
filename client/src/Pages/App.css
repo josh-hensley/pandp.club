@@ -1,56 +1,11 @@
 main {
   text-align: center;
-}
-
-img {
-  width: 80%;
-  max-width: 1024px;
-}
-
-.container {
   margin: 1rem;
   box-sizing: border-box;
   width: 100vw;
 }
 
-/* Login */
-
-form {
-    text-align: start;
-}
-
-input {
-    width: 100%;
-}
-
-button {
-    margin: 1rem;
-}
-
-.login {
-    display: inline-block;
-    scale: 100% 100%;
-    transform-origin: left;
-    transition: scale 0.5s;
-}
-
-.signup {
-    position: fixed;
-    top: 115px;
-    scale: 100% 100%;
-    transform-origin: right;
-    transition: scale 0.5s;
-}
-
-.minimize {
-    scale: 0 100%;
-}
-
-.error-msg {
-    color: #800800;
-    display: none;
-}
-
-.show {
-    display: block;
+img {
+  width: 80%;
+  max-width: 1024px;
 }

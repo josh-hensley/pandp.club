@@ -1,18 +1,25 @@
 export interface IMovie {
     id: number;
     title: string;
+    overview?: string
     poster_path: string;
     release_date: string;
 }
 
-export interface queryResponse {
+export interface IPost {
+    title: string,
+    text: string,
+    comments: string[]
+}
+
+export interface IQueryResponse {
     results: IMovie[];
     total_pages: number;
     total_results: number;
     page: number;
 }
 
-export interface pageData {
+export interface IPageData {
     total_pages: number;
     total_results: number;
     page: number;

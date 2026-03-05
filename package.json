@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd server && npm start",
     "client:dev": "cd client && npm run dev"
   },
   "keywords": [],
