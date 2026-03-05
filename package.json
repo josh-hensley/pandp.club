@@ -4,11 +4,25 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
     "start": "cd server && npm start",
+    "dev" : "nodemon",
     "client:dev": "cd client && npm run dev"
+  },
+  "nodemonConfig": {
+    "watch": ["server", "client"],
+    "ext": "ts, tsx",
+    "delay": "3000",
+    "exec" : "npm run build && npm start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }

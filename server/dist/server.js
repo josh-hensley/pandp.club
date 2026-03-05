@@ -1,36 +1,47 @@
-import mongoose from 'mongoose';
 import express from 'express';
-import dotenv from 'dotenv';
 import path from 'path';
-dotenv.config();
-const { URI, PORT } = process.env;
+import db from './config/connection.js';
+import { User } from './models/index.js';
+import { authenticateToken, signToken } from './utils/auth.js';
 const app = express();
-const connectDb = async () => {
-    try {
-        // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-        if (URI) {
-            await mongoose.connect(URI);
-            await mongoose.connection.db?.admin().command({ ping: 1 });
-            console.log("Pinged your deployment. You successfully connected to MongoDB!");
-        }
-    }
-    finally {
-        // Ensures that the client will close when you finish/error
-        await mongoose.disconnect();
-    }
-};
+await db();
+const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(import.meta.dirname, '../../client/dist')));
-app.get('/user/:id', (req, res) => {
-    const { id } = req.params;
-    res.send(`User - ${id}`);
+app.post('/api/user/:username', async (req, res) => {
+    const { username } = req.params;
+    const data = req.body;
+    const user = await User.updateOne({ username }, { ...data });
+    res.send(user);
+});
+app.get('/api/users', async (_req, res) => {
+    const users = await User.find({});
+    res.send(users);
+});
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) {
+        console.error('User does not exist!');
+    }
+    const correctPassword = await user.isCorrectPassword(password);
+    if (!correctPassword) {
+        console.error('Incorrect Password!');
+    }
+    const token = signToken(user.username, user._id);
+    res.send({ token, user });
+});
+app.post('/api/new', async (req, res) => {
+    const input = req.body;
+    const user = await User.create({ ...input });
+    const token = signToken(user.username, user._id);
+    res.send({ token, user });
 });
 app.get(/(.*)/, (_req, res) => {
     res.sendFile(path.join(import.meta.dirname, '../../client/dist', 'index.html'));
 });
 app.listen(PORT, async () => {
-    await connectDb();
     console.log(`Listening on port: ${PORT}`);
 });
 //# sourceMappingURL=server.js.map

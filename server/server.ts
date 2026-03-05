@@ -8,20 +8,25 @@ const app = express()
 await db()
 const PORT = process.env.PORT || 3000
 
-User.create({ username: 'Lmntreepenguin', password: 'Monday9167' })
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(import.meta.dirname, '../../client/dist')))
 
-app.get('/user/:id', (req, res)=>{
-    const { id } = req.params;
-    res.send(`User - ${id}`)
+app.post('/api/user/:username', async (req, res)=>{
+    const { username } = req.params;
+    const data = req.body;
+    const user = await User.updateOne({ username }, { ...data });
+    res.send(user)
 })
 
-app.get('/login', async (req, res)=>{
+app.get('/api/users', async (_req,res)=>{
+    const users = await User.find({});
+    res.send(users)
+})
+
+app.post('/api/login', async (req, res)=>{
     const { username, password } = req.body;
-    const user: any = User.findOne({ username });
+    const user: any = await User.findOne({ username });
     if (!user){
         console.error('User does not exist!')
     }
@@ -33,18 +38,11 @@ app.get('/login', async (req, res)=>{
     res.send({ token, user })
 })
 
-app.post('/new', async (req, res) => {
+app.post('/api/new', async (req, res) => {
     const input = req.body;
     const user: any = await User.create({...input});
     const token = signToken(user.username, user._id);
     res.send({ token, user }); 
-})
-
-app.put('/queue/:_id', async (req, res)=>{
-    const { _id } = req.params;
-    const { queue } = req.body;
-    const user: any = await User.updateOne({ _id }, { queue })
-    res.send({ message: 'Queue Updated', queue: user.queue })
 })
 
 app.get(/(.*)/, (_req, res) => {

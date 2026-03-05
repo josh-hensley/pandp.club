@@ -32,7 +32,7 @@ const Login = () => {
 
     const handleLoginSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const response = await fetch('/login', {
+        const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ const Login = () => {
     const handleSignupSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (signupData.password === signupData.verification) {
-            const response = await fetch('/new', {
+            const response = await fetch('/api/new', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
