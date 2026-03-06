@@ -60,6 +60,7 @@ const Login = () => {
         } else {
             document.querySelector('.error-msg')?.classList.add('show')
         }
+        location.href = '/'
     }
 
     const handleSwap = () => {
