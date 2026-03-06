@@ -19,7 +19,7 @@ const Search = () => {
 
     const handleSearch = async (e: React.SubmitEvent) => {
         e.preventDefault();
-        const response = await fetch(`${baseUrl}${search.split(' ').join('%2')}`, {
+        const response = await fetch(`${baseUrl}${search.split(' ').join('%20')}`, {
             method: "GET",
             headers: {
                 "content-type": "application/json",
