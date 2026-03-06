@@ -47,6 +47,7 @@ const MovieCard = (props: IMovieCardProps) => {
         console.log(data)
         localStorage.setItem('user', JSON.stringify(user));
         setIsInQueue(false);
+        location.reload()
     }
 
     const handleMoveUp = async () => {
@@ -54,7 +55,8 @@ const MovieCard = (props: IMovieCardProps) => {
         const prev = user.queue.indexOf(id) - 1
         const current = user.queue.indexOf(id)
         const item = user.queue.splice(current, 1)
-        user.queue.splice(prev, 0, item)
+        user.queue.splice(prev, 0, item[0])
+        console.log(user)
         const response = await fetch(`/api/user/${getUser().username}`, {
             method: 'POST',
             headers: {
@@ -65,6 +67,7 @@ const MovieCard = (props: IMovieCardProps) => {
         const data = await response.json();
         console.log(data)
         localStorage.setItem('user', JSON.stringify(user))
+        location.reload()
     }
 
     const handleMoveDown = async () => {
@@ -72,7 +75,7 @@ const MovieCard = (props: IMovieCardProps) => {
         const next = user.queue.indexOf(id) + 1
         const current = user.queue.indexOf(id)
         const item = user.queue.splice(current, 1)
-        user.queue.splice(next, 0, item)
+        user.queue.splice(next, 0, item[0])
         const response = await fetch(`/api/user/${getUser().username}`, {
             method: 'POST',
             headers: {
@@ -83,6 +86,7 @@ const MovieCard = (props: IMovieCardProps) => {
         const data = await response.json();
         console.log(data)
         localStorage.setItem('user', JSON.stringify(user))
+        location.reload()
     }
 
     return (
