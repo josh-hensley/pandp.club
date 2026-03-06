@@ -18,6 +18,7 @@ function App() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user
   }
+  
   const getUsers = async () => {
     const response = await fetch('/api/users');
     const data = await response.json();
