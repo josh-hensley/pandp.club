@@ -4,7 +4,7 @@ const TMDB_KEY = import.meta.env.VITE_TMDB_KEY;
 const baseUrl = "https://api.themoviedb.org/3/movie"
 
 function App() {
-  const bannerUrl = "https://cdn.discordapp.com/attachments/1473899104630214778/1477865454574764062/Untitled_Artwork.jpg?ex=69a6f9b5&is=69a5a835&hm=56c28397f45e44d7660018e784c3956b18719e88beba7bfe543454d2ed198eef&";
+  const bannerUrl = "./Pandp_banner.jpg";
   const currentDate = new Date();
   const [movie, setMovie] = useState({
     title: "",
@@ -18,7 +18,7 @@ function App() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user
   }
-  
+
   const getUsers = async () => {
     const response = await fetch('/api/users');
     const data = await response.json();
