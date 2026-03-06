@@ -7,6 +7,7 @@ const baseUrl = "https://api.themoviedb.org/3/movie"
 
 const Queue = () => {
     const [movies, setMovies] = useState<IMovie[]>([]);
+    const [fetched, setFetched] = useState(false)
 
     const getUser = () => {
         return JSON.parse(localStorage.getItem('user') || '')
@@ -28,9 +29,10 @@ const Queue = () => {
         const fetchMovies = async () => {
             const movieList = await Promise.all(getUser().queue.map((id: number) => getMovie(id)));
             setMovies(movieList);
+            setFetched(true);
         }
-        if (getUser().queue.length > 0) {
-            fetchMovies();
+        if (getUser().queue.length > 0 && !fetched) {
+            fetchMovies();   
         }
     });
 
