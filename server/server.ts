@@ -24,6 +24,12 @@ app.get('/api/users', async (_req,res)=>{
     res.send(users)
 })
 
+app.delete('/api/user/:username', async (req, res)=>{
+    const { username } = req.params;
+    const user = await User.deleteOne({ username })
+    res.send(`User: ${username} deleted.`)
+})
+
 app.post('/api/login', async (req, res)=>{
     const { username, password } = req.body;
     const user: any = await User.findOne({ username });
