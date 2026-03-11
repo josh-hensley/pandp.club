@@ -50,7 +50,7 @@ function App() {
     const week = getISOWeek(currentDate);
     const users = await getUsers();
     console.log(users);
-    const movieId = users[week % 1].queue[0]
+    const movieId = users[week % users.length].queue[0]
     if (movieId) {
       const movie = await getMovie(movieId)
       setMovie({ selectedBy: users[week % 1].username, ...movie })
