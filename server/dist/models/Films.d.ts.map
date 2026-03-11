@@ -1,0 +1,1 @@
+{"version":3,"file":"Films.d.ts","sourceRoot":"","sources":["../../models/Films.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAS,QAAQ,EAAE,MAAM,UAAU,CAAC;AAEnD,UAAU,KAAM,SAAQ,QAAQ;IAC5B,UAAU,EAAE,MAAM,CAAC;IACnB,OAAO,EAAE,MAAM,CAAC;IAChB,QAAQ,CAAC,EAAE,MAAM,EAAE,CAAC;CACvB;AAWD,QAAA,MAAM,IAAI;;;;;;;;;;;;GAA4B,CAAA;AAEtC,eAAe,IAAI,CAAA"}

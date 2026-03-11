@@ -1,7 +1,8 @@
 import express from 'express'
 import path from 'path'
 import db from './config/connection.js'
-import { User, Film, PreviousFilms } from './models/index.js'
+import { User, Film } from './models/index.js'
+import cron from 'node-cron'
 import { signToken } from './utils/auth.js'
 
 const app = express()
@@ -11,6 +12,26 @@ const PORT = process.env.PORT || 3000
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(import.meta.dirname, '../../client/dist')))
+
+const setFilmOfWeek = async () => {
+    const currentDate = new Date();
+    const getISOWeek = (date: Date) => {
+        const d = new Date(date.getTime());
+        d.setHours(0, 0, 0, 0);
+        d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+        const week1 = new Date(d.getFullYear(), 0, 4);
+        return 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+    }
+    const week = getISOWeek(currentDate);
+    const users = await User.find({});
+    const user = users[week % users.length];
+    await Film.create({
+        movieId: user?.queue ? user.queue[0] : 0,
+        selectedBy: user?.username,
+    });
+}
+
+cron.schedule('0 7 * * 1', setFilmOfWeek)
 
 app.post('/api/user/:username', async (req, res) => {
     const { username } = req.params;
@@ -51,27 +72,10 @@ app.post('/api/new', async (req, res) => {
     res.send({ token, user });
 })
 
-// app.post('/api/filmOfWeek', async (req, res) => {
-//     const baseUrl = "https://api.themoviedb.org/3/movie";
-//     const getISOWeek = (date: Date) => {
-//         const d = new Date(date.getTime());
-//         d.setHours(0, 0, 0, 0);
-//         d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
-//         const week1 = new Date(d.getFullYear(), 0, 4);
-//         return 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-//     }
-//     const getMovie = async (id: number) => {
-//         const response = await fetch(`${baseUrl}/${id}`, {
-//             method: "GET",
-//             headers: {
-//                 "content-type": "application/json",
-//                 authorization: `Bearer ${process.env.TMDB_KEY}`
-//             }
-//         });
-//         const movie = await response.json()
-//         return movie
-//     }
-// })
+app.get('/api/filmOfWeek', async (_req, res) => {
+    const films = await Film.find({});
+    res.send(films[films.length - 1]);
+})
 
 app.get(/(.*)/, (_req, res) => {
     res.sendFile(path.join(import.meta.dirname, '../../client/dist', 'index.html'));
