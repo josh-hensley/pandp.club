@@ -1,30 +1,4 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-dotenv.config();
-export const authenticateToken = ({ req }) => {
-    // Allows token to be sent via req.body, req.query, or headers
-    let token = req.body.token || req.query.token || req.headers.authorization;
-    // If the token is sent in the authorization header, extract the token from the header
-    if (req.headers.authorization) {
-        token = token.split(' ').pop().trim();
-    }
-    // If no token is provided, return the request object as is
-    if (!token) {
-        return req;
-    }
-    // Try to verify the token
-    try {
-        const { data } = jwt.verify(token, process.env.JWT_SECRET_KEY || '', { maxAge: '2hr' });
-        // If the token is valid, attach the user data to the request object
-        req.user = data;
-    }
-    catch (err) {
-        // If the token is invalid, log an error message
-        console.log('Invalid token');
-    }
-    // Return the request object
-    return req;
-};
 export const signToken = (username, _id) => {
     // Create a payload with the user information
     const payload = { username, _id };

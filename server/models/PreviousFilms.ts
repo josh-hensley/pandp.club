@@ -19,7 +19,7 @@ interface IPreviousFilms extends Document {
 }
 
 const previousFilmsSchema = new Schema<IPreviousFilms>({
-    films: [Film],
+    films: [filmSchema],
   },
   {
     timestamps: true,

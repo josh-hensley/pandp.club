@@ -1,8 +1,8 @@
 import express from 'express';
 import path from 'path';
 import db from './config/connection.js';
-import { User } from './models/index.js';
-import { authenticateToken, signToken } from './utils/auth.js';
+import { User, Film, PreviousFilms } from './models/index.js';
+import { signToken } from './utils/auth.js';
 const app = express();
 await db();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +18,11 @@ app.post('/api/user/:username', async (req, res) => {
 app.get('/api/users', async (_req, res) => {
     const users = await User.find({});
     res.send(users);
+});
+app.delete('/api/user/:username', async (req, res) => {
+    const { username } = req.params;
+    const user = await User.deleteOne({ username });
+    res.send(`User: ${username} deleted.`);
 });
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
@@ -37,6 +42,27 @@ app.post('/api/new', async (req, res) => {
     const user = await User.create({ ...input });
     const token = signToken(user.username, user._id);
     res.send({ token, user });
+});
+app.post('/api/filmOfWeek', async (req, res) => {
+    const baseUrl = "https://api.themoviedb.org/3/movie";
+    const getISOWeek = (date) => {
+        const d = new Date(date.getTime());
+        d.setHours(0, 0, 0, 0);
+        d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+        const week1 = new Date(d.getFullYear(), 0, 4);
+        return 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+    };
+    const getMovie = async (id) => {
+        const response = await fetch(`${baseUrl}/${id}`, {
+            method: "GET",
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${process.env.TMDB_KEY}`
+            }
+        });
+        const movie = await response.json();
+        return movie;
+    };
 });
 app.get(/(.*)/, (_req, res) => {
     res.sendFile(path.join(import.meta.dirname, '../../client/dist', 'index.html'));
