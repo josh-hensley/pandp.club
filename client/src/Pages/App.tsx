@@ -19,21 +19,6 @@ function App() {
     return user
   }
 
-  const getUsers = async () => {
-    const response = await fetch('/api/users');
-    const data = await response.json();
-    console.log(data)
-    return data;
-  }
-
-  const getISOWeek = (date: Date) => {
-    const d = new Date(date.getTime());
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
-    const week1 = new Date(d.getFullYear(), 0, 4);
-    return 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-  }
-
   const getMovie = async (id: number) => {
     const response = await fetch(`${baseUrl}/${id}`, {
       method: "GET",
@@ -47,13 +32,9 @@ function App() {
   }
 
   const getFilmOfWeek = async () => {
-    const week = getISOWeek(currentDate);
-    const users = await getUsers();
-    const movieId = users[week % users.length].queue[0]
-    if (movieId) {
-      const movie = await getMovie(movieId)
-      setMovie({ selectedBy: users[week % users.length].username, ...movie })
-    }
+    const response = await fetch('/api/filmOfWeek');
+    const data = await response.json()
+    setMovie(await getMovie(data.movieId));
   }
 
   useEffect(() => {
