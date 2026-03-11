@@ -51,6 +51,10 @@ app.post('/api/new', async (req, res) => {
     res.send({ token, user }); 
 })
 
+app.post('/api/', async (req, res) => {
+    
+})
+
 app.get(/(.*)/, (_req, res) => {
   res.sendFile(path.join(import.meta.dirname, '../../client/dist', 'index.html'));
 })

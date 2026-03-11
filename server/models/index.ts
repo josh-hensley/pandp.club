@@ -1,3 +1,4 @@
 import User from './User.js';
+import { Film, PreviousFilms } from './PreviousFilms.js'
 
-export { User };
+export { User, Film, PreviousFilms };

@@ -49,11 +49,10 @@ function App() {
   const getFilmOfWeek = async () => {
     const week = getISOWeek(currentDate);
     const users = await getUsers();
-    console.log(users);
     const movieId = users[week % users.length].queue[0]
     if (movieId) {
       const movie = await getMovie(movieId)
-      setMovie({ selectedBy: users[week % 1].username, ...movie })
+      setMovie({ selectedBy: users[week % users.length].username, ...movie })
     }
   }
 
