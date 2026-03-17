@@ -53,7 +53,7 @@ function App() {
       <h2>Film for the week of {currentDate.toDateString()}</h2>
       <h3>Selected by {movie.selectedBy}</h3>
       <h3>{movie.title}</h3>
-      <p>Released {movie.release_date.split("-")[0]}</p>
+      <p>Released {movie.release_date.split("-")[0]}</p> 
       <img src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} />
       <p>{movie.overview}</p>
       <div className="flex">
