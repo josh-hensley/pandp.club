@@ -34,7 +34,8 @@ function App() {
   const getFilmOfWeek = async () => {
     const response = await fetch('/api/filmOfWeek');
     const data = await response.json()
-    setMovie(await getMovie(data.movieId));
+    const movie = await getMovie(data.movieId)
+    setMovie({selectedBy: data.selectedBy, ...movie});
   }
 
   useEffect(() => {
