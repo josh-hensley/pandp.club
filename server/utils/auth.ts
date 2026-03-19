@@ -5,7 +5,7 @@ export const signToken = (username: string, _id: string) => {
   const payload = { username, _id };
   const secretKey: any = process.env.JWT_SECRET_KEY; // Get the secret key from environment variables
 
-  // Sign the token with the payload and secret key, and set it to expire in 2 hours
-  return jwt.sign({ data: payload }, secretKey, { expiresIn: '2h' });
+  // Sign the token with the payload and secret key, and set it to expire in 1 month
+  return jwt.sign({ data: payload }, secretKey, { expiresIn: '730h' }); 
 };
 

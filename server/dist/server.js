@@ -28,6 +28,11 @@ const setFilmOfWeek = async () => {
     });
 };
 cron.schedule('0 7 * * 1', setFilmOfWeek);
+app.get('/api/user/:username', async (req, res) => {
+    const { username } = req.params;
+    const user = await User.find({ username });
+    res.send(user);
+});
 app.post('/api/user/:username', async (req, res) => {
     const { username } = req.params;
     const data = req.body;
@@ -54,13 +59,17 @@ app.post('/api/login', async (req, res) => {
         console.error('Incorrect Password!');
     }
     const token = signToken(user.username, user._id);
-    res.send({ token, user });
+    res.send({ token });
 });
 app.post('/api/new', async (req, res) => {
     const input = req.body;
     const user = await User.create({ ...input });
     const token = signToken(user.username, user._id);
     res.send({ token, user });
+});
+app.get('/api/films', async (_req, res) => {
+    const films = await Film.find({});
+    res.send(films);
 });
 app.get('/api/filmOfWeek', async (_req, res) => {
     const films = await Film.find({});

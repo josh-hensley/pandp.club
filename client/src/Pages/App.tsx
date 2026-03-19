@@ -1,4 +1,5 @@
 import './App.css'
+import Auth from '../utils/auth'
 import { useState, useEffect } from 'react';
 const TMDB_KEY = import.meta.env.VITE_TMDB_KEY;
 const baseUrl = "https://api.themoviedb.org/3/movie"
@@ -13,11 +14,6 @@ function App() {
     poster_path: "",
     overview: ""
   });
-
-  const getUser = () => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user
-  }
 
   const getMovie = async (id: number) => {
     const response = await fetch(`${baseUrl}/${id}`, {
@@ -35,7 +31,7 @@ function App() {
     const response = await fetch('/api/filmOfWeek');
     const data = await response.json()
     const movie = await getMovie(data.movieId)
-    setMovie({selectedBy: data.selectedBy, ...movie});
+    setMovie({ selectedBy: data.selectedBy, ...movie });
   }
 
   useEffect(() => {
@@ -49,12 +45,12 @@ function App() {
   return (
     <main className="container">
       <h1>Popcorn and Paraphernalia</h1>
-      <p className="welcome">Welcome, {getUser().username ? getUser().username : 'Guest'}</p>
+      <p className="welcome">Welcome, {Auth.loggedIn() ? Auth.getProfile().data.username : 'Guest'}</p>
       <img src={bannerUrl} />
       <h2>Film for the week of {currentDate.toDateString()}</h2>
       <h3>Selected by {movie.selectedBy}</h3>
       <h3>{movie.title}</h3>
-      <p>Released {movie.release_date.split("-")[0]}</p> 
+      <p>Released {movie.release_date.split("-")[0]}</p>
       <img src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} />
       <p>{movie.overview}</p>
       <div className="flex">

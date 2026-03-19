@@ -1,4 +1,5 @@
 import { useState } from "react"
+import Auth from "../utils/auth"
 import "./Login.css"
 
 const Login = () => {
@@ -40,8 +41,7 @@ const Login = () => {
                 body: JSON.stringify({ ...loginData })
             });
         const data = await response.json();
-        localStorage.setItem('user', JSON.stringify(data.user))
-        location.href = '/'
+        Auth.login(data.token)
     }
 
     const handleSignupSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -55,12 +55,10 @@ const Login = () => {
                 body: JSON.stringify({ ...signupData })
             });
             const data = await response.json()
-            localStorage.setItem('user', JSON.stringify(data.user))
-            console.log(data)
+            Auth.login(data.token)
         } else {
             document.querySelector('.error-msg')?.classList.add('show')
         }
-        location.href = '/'
     }
 
     const handleSwap = () => {

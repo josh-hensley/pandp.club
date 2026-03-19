@@ -24,3 +24,8 @@ export interface IPageData {
     total_results: number;
     page: number;
 }
+
+export interface IUser {
+    username: string;
+    queue: number[];
+}

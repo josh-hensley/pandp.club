@@ -1,5 +1,6 @@
-import type { IMovie } from "../Interfaces";
-import { useState } from "react";
+import Auth from "../utils/auth";
+import type { IMovie, IUser } from "../Interfaces";
+import { useState, useEffect } from "react";
 
 interface IMovieCardProps {
     movie: IMovie;
@@ -9,84 +10,72 @@ interface IMovieCardProps {
 const MovieCard = (props: IMovieCardProps) => {
     const { queueView } = props || false
     const { id, title, release_date, poster_path } = props.movie;
+    const [user, setUser] = useState<IUser>({username: "", queue: []})
     const [isInQueue, setIsInQueue] = useState(JSON.parse(localStorage.getItem('user') || '[]').queue.includes(id))
 
-    const getUser = () => {
-        const user = JSON.parse(localStorage.getItem('user') || 'Guest')
-        return user;
-    }
+    useEffect(()=>{
+        const asyncCall = async () => {
+            setUser((await Auth.getUser()))
+        }
+        asyncCall();
+    }, [])
 
     const handleAddToQueue = async () => {
-        const user = getUser();
-        user.queue.push(id)
-        const response = await fetch(`/api/user/${getUser().username}`, {
+        const queue = [...user.queue, id]
+        setUser({ ...user, queue })
+        await fetch(`/api/user/${user.username}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ ...user })
         });
-        const data = await response.json();
-        localStorage.setItem('user', JSON.stringify(user))
-        console.log(data)
         setIsInQueue(true)
     }
 
     const handleRemoveFromQueue = async () => {
-        const user = getUser();
-        const filteredQueue = user.queue.filter((item: number) => item != id);
-        user.queue = filteredQueue;
-        const response = await fetch(`/api/user/${getUser().username}`, {
+        const queue = user.queue.filter((item: number) => item != id);
+        setUser({ ...user, queue });
+        await fetch(`/api/user/${user?.username}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ ...user })
         });
-        const data = await response.json();
-        console.log(data)
-        localStorage.setItem('user', JSON.stringify(user));
         setIsInQueue(false);
-        location.reload()
     }
 
     const handleMoveUp = async () => {
-        const user = getUser();
-        const prev = user.queue.indexOf(id) - 1
-        const current = user.queue.indexOf(id)
-        const item = user.queue.splice(current, 1)
-        user.queue.splice(prev, 0, item[0])
-        console.log(user)
-        const response = await fetch(`/api/user/${getUser().username}`, {
+        const queue = [...user.queue]
+        const prev = queue.indexOf(id) - 1
+        const current = queue.indexOf(id)
+        const item = queue.splice(current, 1)
+        queue.splice(prev, 0, item[0])
+        await fetch(`/api/user/${user.username}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ ...user })
         });
-        const data = await response.json();
-        console.log(data)
-        localStorage.setItem('user', JSON.stringify(user))
-        location.reload()
+        setUser({...user, queue})
     }
 
     const handleMoveDown = async () => {
-        const user = getUser();
-        const next = user.queue.indexOf(id) + 1
-        const current = user.queue.indexOf(id)
-        const item = user.queue.splice(current, 1)
-        user.queue.splice(next, 0, item[0])
-        const response = await fetch(`/api/user/${getUser().username}`, {
+        const queue = [...user.queue]
+        const next = queue.indexOf(id) + 1
+        const current = queue.indexOf(id)
+        const item = queue.splice(current, 1)
+        queue.splice(next, 0, item[0])
+        await fetch(`/api/user/${user.username}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ ...user })
         });
-        const data = await response.json();
-        console.log(data)
-        localStorage.setItem('user', JSON.stringify(user))
-        location.reload()
+        setUser({...user, queue})
     }
 
     return (
