@@ -9,10 +9,7 @@ const baseUrl = "https://api.themoviedb.org/3/movie"
 const Queue = () => {
     const [movies, setMovies] = useState<IMovie[]>([]);
     const [fetched, setFetched] = useState(false);
-    const [user, setUser] = useState<IUser>({
-        username: "Guest",
-        queue: []
-    })
+    const [user, setUser] = useState<IUser>({ username: "", queue: [] })
 
     const getMovie = async (id: number) => {
         const response = await fetch(`${baseUrl}/${id}`, {
@@ -26,32 +23,67 @@ const Queue = () => {
         return movie
     }
 
-    const getUser = async () => {
-        const username = Auth.getProfile().data.username
-        const response = await fetch(`/api/user/${username}`)
-        const user: IUser = await response.json()
-        setUser(user);
-    }
-
     useEffect(() => {
-        const fetchMovies = async () => {
-            await getUser();
-            const movieList = await Promise.all(user.queue.map((id: number) => getMovie(id)));
-            setMovies(movieList);
+        const fetchData = async () => {
+            const fetchedUser = await Auth.getUser();
+            setUser({ ...fetchedUser })
+            const { queue } = fetchedUser;
+            const fetchedMovies = Promise.all(queue.map((id: number) => getMovie(id)))
+            setMovies(await fetchedMovies)
             setFetched(true);
         }
-        if (Auth.loggedIn() && !fetched) {
-            fetchMovies();
+        if (!fetched) {
+            fetchData();
         }
-    });
+    }, [fetched]);
+
+    const handleMoveUp = async (id: number) => {
+        const queue = [...user.queue]
+        const prev = queue.indexOf(id) - 1
+        const current = queue.indexOf(id)
+        const item = queue.splice(current, 1)
+        queue.splice(prev, 0, item[0])
+        await fetch(`/api/user/${user.username}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...user, queue })
+        });
+        setUser({ ...user, queue })
+        setFetched(false)
+    }
+
+    const handleMoveDown = async (id: number) => {
+        const queue = [...user.queue]
+        const next = queue.indexOf(id) + 1
+        const current = queue.indexOf(id)
+        const item = queue.splice(current, 1)
+        queue.splice(next, 0, item[0])
+        await fetch(`/api/user/${user.username}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...user, queue })
+        });
+        setUser({ ...user, queue })
+        setFetched(false)
+    }
 
     return (
         <div className="container">
-            <h2>Your Queue</h2>
+            <h2>{user.username}'s Queue</h2>
             <div className="queue">
-                {Auth.loggedIn() && user.queue.length > 0 ? movies.map((movie) => {
+                {Auth.loggedIn() && movies ? movies.map((movie) => {
                     return (
-                        <MovieCard movie={movie} queueView key={movie.id} />
+                        <div key={movie.id}>
+                            <MovieCard movie={movie} />
+                            <div>
+                                <button type="button" onClick={() => handleMoveUp(movie.id)} data-movie-id={movie.id}>Move Up</button>
+                                <button type="button" onClick={() => handleMoveDown(movie.id)} data-movie-id={movie.id}>Move Down</button>
+                            </div>
+                        </div>
                     )
                 }) : <p>Go to search to add movies to queue!</p>}
             </div>

@@ -8,74 +8,43 @@ interface IMovieCardProps {
 }
 
 const MovieCard = (props: IMovieCardProps) => {
-    const { queueView } = props || false
     const { id, title, release_date, poster_path } = props.movie;
     const [user, setUser] = useState<IUser>({username: "", queue: []})
-    const [isInQueue, setIsInQueue] = useState(JSON.parse(localStorage.getItem('user') || '[]').queue.includes(id))
+    const [isInQueue, setIsInQueue] = useState(true)
 
     useEffect(()=>{
         const asyncCall = async () => {
-            setUser((await Auth.getUser()))
+            setUser(await Auth.getUser())
         }
         asyncCall();
-    }, [])
+    })
 
     const handleAddToQueue = async () => {
         const queue = [...user.queue, id]
-        setUser({ ...user, queue })
-        await fetch(`/api/user/${user.username}`, {
+        const response = await fetch(`/api/user/${user.username}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ...user })
+            body: JSON.stringify({ ...user, queue })
         });
+        const data = await response.json()
+        setUser({...data})
         setIsInQueue(true)
     }
 
     const handleRemoveFromQueue = async () => {
         const queue = user.queue.filter((item: number) => item != id);
-        setUser({ ...user, queue });
-        await fetch(`/api/user/${user?.username}`, {
+        const response = await fetch(`/api/user/${user?.username}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ...user })
+            body: JSON.stringify({ ...user, queue })
         });
+        const data = await response.json()
+        setUser({...data})
         setIsInQueue(false);
-    }
-
-    const handleMoveUp = async () => {
-        const queue = [...user.queue]
-        const prev = queue.indexOf(id) - 1
-        const current = queue.indexOf(id)
-        const item = queue.splice(current, 1)
-        queue.splice(prev, 0, item[0])
-        await fetch(`/api/user/${user.username}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ...user })
-        });
-        setUser({...user, queue})
-    }
-
-    const handleMoveDown = async () => {
-        const queue = [...user.queue]
-        const next = queue.indexOf(id) + 1
-        const current = queue.indexOf(id)
-        const item = queue.splice(current, 1)
-        queue.splice(next, 0, item[0])
-        await fetch(`/api/user/${user.username}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ...user })
-        });
-        setUser({...user, queue})
     }
 
     return (
@@ -85,14 +54,6 @@ const MovieCard = (props: IMovieCardProps) => {
             {isInQueue ?
                 <button type="button" onClick={handleRemoveFromQueue}>Remove From Queue</button> :
                 <button type="button" onClick={handleAddToQueue}>Add to Queue</button>}
-            {queueView &&
-                <div>
-                    <button type="button" onClick={handleMoveUp} value={-1}>Move Up</button>
-                    <button type="button" onClick={handleMoveDown} value={1}>Move Down</button>
-                </div>
-            }
-
-
         </div>
     )
 }
