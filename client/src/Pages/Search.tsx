@@ -12,7 +12,7 @@ const Search = () => {
     const [user, setUser] = useState<IUser>({ username: "", queue: [] })
     const baseUrl = "https://api.themoviedb.org/3/search/movie?query="
 
-    useEffect(()=>{
+    useEffect(() => {
         const asyncCall = async () => {
             const user = await Auth.getUser();
             setUser(user)
@@ -117,12 +117,12 @@ const Search = () => {
             <div className="results">
                 {movies.length > 0 ? movies.map(movie => {
                     return (
-                        <>
+                        <div className="card-container">
                             <MovieCard movie={movie} key={movie.id} />
                             {isInQueue(movie.id) ? <button type="button" onClick={() => handleRemoveFromQueue(movie.id)}>Remove From Queue</button> :
                                 <button type="button" onClick={() => handleAddToQueue(movie.id)}>Add to Queue</button>
                             }
-                        </>
+                        </div>
                     )
                 }) : <p>Search for a film to add to your queue!</p>}
 
