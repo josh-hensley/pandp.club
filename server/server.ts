@@ -39,7 +39,7 @@ app.get('/api/user/:username', async (req, res) => {
     res.send(user)
 })
 
-app.post('/api/user/:username', async (req, res) => {
+app.put('/api/user/:username', async (req, res) => {
     const { username } = req.params;
     const data = req.body;
     const user = await User.updateOne({ username }, { ...data });
@@ -57,7 +57,7 @@ app.delete('/api/user/:username', async (req, res) => {
     res.send(`User: ${username} deleted.`)
 })
 
-app.post('/api/login', async (req, res) => {
+app.put('/api/login', async (req, res) => {
     const { username, password } = req.body;
     const user: any = await User.findOne({ username });
     if (!user) {

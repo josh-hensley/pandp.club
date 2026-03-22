@@ -1,5 +1,4 @@
 import discordLogo from '../assets/discord-brands-solid-full.svg'
-import './Footer.css'
 
 const Footer = () => {
     return (

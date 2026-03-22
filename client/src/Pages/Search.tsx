@@ -1,7 +1,7 @@
-import './Search.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Auth from '../utils/auth';
 import { MovieCard } from '../Components';
-import type { IMovie, IQueryResponse, IPageData } from '../Interfaces';
+import type { IMovie, IQueryResponse, IPageData, IUser } from '../Interfaces';
 
 const TMDB_KEY = import.meta.env.VITE_TMDB_KEY
 
@@ -9,7 +9,20 @@ const Search = () => {
     const [search, setSearch] = useState("")
     const [movies, setMovies] = useState<IMovie[]>([])
     const [pageData, setPageData] = useState<IPageData>()
+    const [user, setUser] = useState<IUser>({ username: "", queue: [] })
     const baseUrl = "https://api.themoviedb.org/3/search/movie?query="
+
+    useEffect(()=>{
+        const asyncCall = async () => {
+            const user = await Auth.getUser();
+            setUser(user)
+        }
+        asyncCall()
+    }, [movies])
+
+    const isInQueue = (id: number) => {
+        return user.queue.includes(id)
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -68,6 +81,32 @@ const Search = () => {
         }
     }
 
+    const handleAddToQueue = async (id: number) => {
+        const queue = [...user.queue, id]
+        const response = await fetch(`/api/user/${user.username}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...user, queue })
+        });
+        const data = await response.json()
+        setUser({ ...data })
+    }
+
+    const handleRemoveFromQueue = async (id: number) => {
+        const queue = user.queue.filter((item: number) => item != id);
+        const response = await fetch(`/api/user/${user?.username}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...user, queue })
+        });
+        const data = await response.json()
+        setUser({ ...data })
+    }
+
 
     return (
         <div className="container">
@@ -76,7 +115,17 @@ const Search = () => {
                 <button type="submit">Search</button>
             </form>
             <div className="results">
-                {movies.length > 0 ? movies.map(movie => <MovieCard movie={movie} key={movie.id} />) : <p>Search for a film to add to your queue!</p>}
+                {movies.length > 0 ? movies.map(movie => {
+                    return (
+                        <>
+                            <MovieCard movie={movie} key={movie.id} />
+                            {isInQueue(movie.id) ? <button type="button" onClick={() => handleRemoveFromQueue(movie.id)}>Remove From Queue</button> :
+                                <button type="button" onClick={() => handleAddToQueue(movie.id)}>Add to Queue</button>
+                            }
+                        </>
+                    )
+                }) : <p>Search for a film to add to your queue!</p>}
+
             </div>
             {pageData?.page && (
                 <div className="pages">

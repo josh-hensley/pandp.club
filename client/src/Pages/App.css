@@ -1,3 +1,135 @@
+/* Header */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  box-sizing: border-box;
+  margin: 3px;
+}
+
+.fs-logo {
+  display: none;
+}
+
+.logo {
+  font-size: 50px;
+  padding: 0;
+  margin: 0;
+}
+
+.hamburger-bar {
+  height: 3px;
+  width: 20px;
+  margin: 2px;
+  background-color: white;
+  transition: all 0.5s;
+}
+
+.btn-menu {
+  height: 50px;
+  width: 50px;
+  padding: 5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown {
+  background-color: #04040450;
+  padding: 1rem;
+  scale: 100% 0%;
+  transform-origin: top;
+  height: 0;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+.dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.active {
+  opacity: 100%;
+  height: 100%;
+  visibility: visible;
+  scale: 100% 100%;
+}
+
+.bar-1.close {
+  transform: rotate(45deg);
+  translate: 0 100%;
+  scale: 150%
+}
+
+.bar-2.close {
+  transform: rotate(-45deg);
+  translate: 0 -100%;
+  scale: 150%;
+}
+
+.bar-3.close {
+  opacity: 0;
+  display: none;
+}
+
+.fa-discord {
+  width: 50px;
+}
+
+@media screen and (min-width: 600px) {
+  .logo {
+    display: none
+  }
+
+  .fs-logo {
+    display: inline;
+    font-size: 50px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .btn-menu {
+    display: none;
+  }
+
+  .dropdown {
+    opacity: 100%;
+    height: 100%;
+    padding: 0;
+    visibility: visible;
+    scale: 100% 100%;
+  }
+
+  .dropdown ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .links a {
+    padding: 0 1rem
+  }
+}
+
+/* Footer */
+
+footer {
+  display: flex;
+  justify-content: space-around;
+  bottom: 35px;
+  left: 0;
+  width: 100%;
+  background-color: #242424;
+}
+
+/* App */
 main {
   text-align: center;
   margin: 1rem;
@@ -8,4 +140,135 @@ main {
 img {
   width: 80%;
   max-width: 1024px;
+}
+
+/* Login */
+
+form {
+  text-align: start;
+  margin: 0 auto;
+}
+
+input {
+  width: 100%;
+}
+
+button {
+  margin: 1rem;
+}
+
+.login {
+  display: inline-block;
+  scale: 100% 100%;
+  transform-origin: left;
+  transition: scale 0.5s;
+}
+
+.signup {
+  position: fixed;
+  top: 115px;
+  left: 40px;
+  scale: 100% 100%;
+  transform-origin: right;
+  transition: scale 0.5s;
+}
+
+.minimize {
+  scale: 0 100%;
+}
+
+.login-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.error-msg {
+  color: #800800;
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+/* Queue */
+
+h2 {
+  text-align: center;
+}
+
+@media screen and (min-width: 600px) {
+  .queue {
+    display: grid;
+    grid-template-columns: auto auto auto;
+  }
+
+  .card {
+    max-width: 600px;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+/* Search */
+
+.container {
+  margin: 0 auto;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+form {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+p {
+  text-align: center;
+}
+
+.card {
+  box-sizing: border-box;
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-buttons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+@media screen and (min-width: 600px) {
+  .card {
+    max-width: 600px;
+  }
+
+  .results {
+    display: grid;
+    grid-template-columns: auto auto auto;
+  }
+
+  form {
+    max-width: 600px;
+  }
 }

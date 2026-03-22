@@ -24,9 +24,9 @@ const userSchema = new Schema<IUser>({
     password: {
       type: String,
       required: true,
-      minlength: 5,
+      minlength: 5
     },
-    queue:[Number]
+    queue:[ Number ]
   },
   {
     timestamps: true,

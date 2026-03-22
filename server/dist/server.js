@@ -33,7 +33,7 @@ app.get('/api/user/:username', async (req, res) => {
     const user = await User.find({ username });
     res.send(user);
 });
-app.post('/api/user/:username', async (req, res) => {
+app.put('/api/user/:username', async (req, res) => {
     const { username } = req.params;
     const data = req.body;
     const user = await User.updateOne({ username }, { ...data });

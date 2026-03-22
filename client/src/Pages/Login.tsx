@@ -1,6 +1,5 @@
 import { useState } from "react"
 import Auth from "../utils/auth"
-import "./Login.css"
 
 const Login = () => {
     const [loginData, setLoginData] = useState({
