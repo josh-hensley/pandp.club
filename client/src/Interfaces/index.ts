@@ -2,6 +2,7 @@ export interface IMovie {
     id: number;
     title: string;
     overview?: string
+    selectedBy?: string 
     poster_path: string;
     release_date: string;
 }

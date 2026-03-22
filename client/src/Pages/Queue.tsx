@@ -88,7 +88,7 @@ const Queue = () => {
           movies.map((movie) => {
             return (
               <div className="card-container" key={movie.id}>
-                <MovieCard movie={movie} />
+                <MovieCard movie={movie} showDescription={false} />
                 <div className="button-container">
                   {isInQueue(movie.id) ? (
                     <button
