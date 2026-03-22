@@ -1,5 +1,7 @@
 import { useState } from "react"
 import Auth from "../utils/auth"
+import type { AccountCreationData } from "../Interfaces"
+import createAccount from "../services/createAccount"
 
 const Login = () => {
     const [loginData, setLoginData] = useState({
@@ -7,12 +9,7 @@ const Login = () => {
         password: ""
     })
 
-    const [signupData, setSignupData] = useState({
-        "email": "",
-        "username": "",
-        "password": "",
-        verification: ""
-    })
+    const [signupData, setSignupData] = useState<AccountCreationData>()
 
     const handleLoginInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -27,7 +24,7 @@ const Login = () => {
         setSignupData({
             ...signupData,
             [name]: value
-        })
+        } as AccountCreationData)
     }
 
     const handleLoginSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -45,16 +42,8 @@ const Login = () => {
 
     const handleSignupSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (signupData.password === signupData.verification) {
-            const response = await fetch('/api/new', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ ...signupData })
-            });
-            const data = await response.json()
-            Auth.login(data.token)
+        if (signupData?.password === signupData?.verification) {
+            await createAccount(signupData as AccountCreationData)
         } else {
             document.querySelector('.error-msg')?.classList.add('show')
         }
@@ -82,13 +71,13 @@ const Login = () => {
                 <fieldset>
                     <legend>Sign Up!</legend>
                     <label htmlFor="email">Email: </label>
-                    <input type="email" name="email" id="email" onChange={handleSignupInput} value={signupData["email"]} />
+                    <input type="email" name="email" id="email" onChange={handleSignupInput} value={signupData?.email} />
                     <label htmlFor="username">Username: </label>
-                    <input type="text" name="username" id="username" onChange={handleSignupInput} value={signupData["username"]} />
+                    <input type="text" name="username" id="username" onChange={handleSignupInput} value={signupData?.username} />
                     <label htmlFor="password">Password: </label>
-                    <input type="password" name="password" id="password" onChange={handleSignupInput} value={signupData["password"]} />
+                    <input type="password" name="password" id="password" onChange={handleSignupInput} value={signupData?.password} />
                     <label htmlFor="verification">Verify Password: </label>
-                    <input type="password" name="verification" id="verification" onChange={handleSignupInput} value={signupData.verification} />
+                    <input type="password" name="verification" id="verification" onChange={handleSignupInput} value={signupData?.verification} />
                     <p className="error-msg">passwords must match!</p>
                     <button type="submit">Submit</button>
                     <p>Already have an account? <a onClick={handleSwap}>Log In</a> </p>

@@ -29,3 +29,10 @@ export interface IUser {
     username: string;
     queue: number[];
 }
+
+export interface AccountCreationData {
+    email: string,
+    username: string,
+    password: string,
+    verification: string
+}

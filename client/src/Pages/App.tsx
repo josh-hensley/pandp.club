@@ -1,11 +1,11 @@
 import './App.css'
 import Auth from '../utils/auth'
 import { useState, useEffect } from 'react';
+import bannerUrl from '../assets/Pandp_banner.jpg'
 const TMDB_KEY = import.meta.env.VITE_TMDB_KEY;
 const baseUrl = "https://api.themoviedb.org/3/movie"
 
 function App() {
-  const bannerUrl = "./Pandp_banner.jpg";
   const currentDate = new Date();
   const [movie, setMovie] = useState({
     title: "",
