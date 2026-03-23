@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
     "build": "npx tsc",
-    "setFilm": "node dist/addFilmOfWeek.js"
+    "setFilm": "node dist/utils/manualSetFilmOfWeek.js"
   },
   "keywords": [],
   "author": "",
