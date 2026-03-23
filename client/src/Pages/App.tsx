@@ -19,7 +19,7 @@ function App() {
       setMovie({ selectedBy: data.selectedBy, ...movie });
     };
     asyncCall();
-  });
+  }, []);
 
   return (
     <main className="container">

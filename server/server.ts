@@ -83,6 +83,11 @@ app.get('/api/films', async (_req, res) => {
     res.send(films)
 })
 
+app.delete('/api/film/:id', async (req, res) => {
+    const film = await Film.deleteOne({ _id: req.params.id });
+    res.send(`Deleted: ${film.deletedCount}`)
+})
+
 app.get('/api/filmOfWeek', async (_req, res) => {
     const films = await Film.find({});
     res.send(films[films.length - 1]);

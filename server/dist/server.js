@@ -48,7 +48,7 @@ app.delete('/api/user/:username', async (req, res) => {
     const user = await User.deleteOne({ username });
     res.send(`User: ${username} deleted.`);
 });
-app.post('/api/login', async (req, res) => {
+app.put('/api/login', async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
     if (!user) {
@@ -70,6 +70,10 @@ app.post('/api/new', async (req, res) => {
 app.get('/api/films', async (_req, res) => {
     const films = await Film.find({});
     res.send(films);
+});
+app.delete('/api/film/:id', async (req, res) => {
+    const film = await Film.deleteOne({ _id: req.params.id });
+    res.send(`Deleted: ${film.deletedCount} ${film.acknowledged}`);
 });
 app.get('/api/filmOfWeek', async (_req, res) => {
     const films = await Film.find({});
