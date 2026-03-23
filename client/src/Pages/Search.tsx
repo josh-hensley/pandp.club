@@ -118,7 +118,7 @@ const Search = () => {
                 {movies.length > 0 ? movies.map(movie => {
                     return (
                         <div className="card-container">
-                            <MovieCard movie={movie} key={movie.id} />
+                            <MovieCard movie={movie} showDescription={false} key={movie.id} />
                             {isInQueue(movie.id) ? <button type="button" onClick={() => handleRemoveFromQueue(movie.id)}>Remove From Queue</button> :
                                 <button type="button" onClick={() => handleAddToQueue(movie.id)}>Add to Queue</button>
                             }

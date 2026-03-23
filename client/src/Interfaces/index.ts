@@ -2,6 +2,7 @@ export interface IMovie {
     id: number;
     title: string;
     overview?: string
+    selectedBy?: string 
     poster_path: string;
     release_date: string;
 }
@@ -28,4 +29,11 @@ export interface IPageData {
 export interface IUser {
     username: string;
     queue: number[];
+}
+
+export interface AccountCreationData {
+    email: string,
+    username: string,
+    password: string,
+    verification: string
 }

@@ -1,9 +1,15 @@
+/* root */
+/* :root {
+  background-repeat: clip;
+  background-image: url(../assets/Pandp_banner.jpg);
+} */
+
 /* Header */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 98vw;
+  width: 100vw;
   box-sizing: border-box;
   margin: 3px;
 }
@@ -140,6 +146,12 @@ main {
 img {
   width: 80%;
   max-width: 1024px;
+}
+
+@media screen and (min-width: 600px) {
+  main {
+    max-width: 600px;
+  }
 }
 
 /* Login */

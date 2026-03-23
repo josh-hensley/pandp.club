@@ -1,16 +1,21 @@
 import type { IMovie } from "../Interfaces";
+import { getTMDBImage } from "../services/getTMDBImage";
 
 interface IMovieCardProps {
     movie: IMovie;
+    showDescription: boolean;
 }
 
 const MovieCard = (props: IMovieCardProps) => {
-    const { title, release_date, poster_path } = props.movie;
+    const { title, release_date, poster_path, overview } = props.movie;
+    const releaseYear = new Date(release_date).getFullYear().toString()
 
     return (
         <div className="card">
-            <h3>{title}, {release_date && release_date?.split('-')[0]}</h3>
-            <img src={`https://image.tmdb.org/t/p/original/${poster_path}`} alt="" />
+            <h3>{title}</h3>
+            <p>{release_date && "Released " + releaseYear}</p>
+            <img src={getTMDBImage(poster_path as string)} />
+            {props.showDescription && <p>{overview}</p>}
         </div>
     )
 }
