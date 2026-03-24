@@ -1,13 +1,12 @@
 import express from 'express'
 import path from 'path'
 import db from './config/connection.js'
-import { User, Film } from './models/index.js'
 import cron from 'node-cron'
 import apiRoutes from './routes/api.js'
 import setFilmOfWeek from './utils/autoSetFilmOfWeek.js'
 
-const app = express()
 await db()
+const app = express()
 const PORT = process.env.PORT || 3000
 
 app.use(express.json())

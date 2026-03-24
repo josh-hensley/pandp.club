@@ -9,6 +9,7 @@ const db = async () => {
         return mongoose.connection;
     }
     catch (error) {
+        console.log(URI);
         console.error('Database connection error:', error);
         throw new Error('Database connection failed.');
     }
