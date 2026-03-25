@@ -11,7 +11,7 @@ router.get('/:username', async (req, res) => {
 router.put('/:username', async (req, res) => {
     const { username } = req.params;
     const data = req.body;
-    const user = await User.updateOne({ username }, { ...data });
+    const user = await User.findOneAndUpdate({ username }, { ...data });
     res.send(user)
 })
 

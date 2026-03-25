@@ -43,7 +43,7 @@ const Queue = () => {
     const current = queue.indexOf(movieId);
     const item = queue.splice(current, 1);
     queue.splice(newIndex, 0, item[0]);
-    await fetch(`/api/user/${user.username}`, {
+    await fetch(`/api/users/${user?.username}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const Queue = () => {
 
   const handleAddToQueue = async (id: number) => {
     const queue = [...user.queue, id];
-    const response = await fetch(`/api/user/${user.username}`, {
+    const response = await fetch(`/api/users/${user?.username}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +69,7 @@ const Queue = () => {
 
   const handleRemoveFromQueue = async (id: number) => {
     const queue = user.queue.filter((item: number) => item != id);
-    const response = await fetch(`/api/user/${user?.username}`, {
+    const response = await fetch(`/api/users/${user?.username}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const Queue = () => {
 
   return (
     <div className="container">
-      <h2>{user.username}'s Queue</h2>
+      <h2>{user?.username}'s Queue</h2>
       <div className="queue">
         {Auth.loggedIn() && movies ? (
           movies.map((movie) => {

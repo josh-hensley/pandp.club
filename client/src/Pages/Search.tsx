@@ -18,10 +18,10 @@ const Search = () => {
             setUser(user)
         }
         asyncCall()
-    }, [movies])
+    }, [movies, user])
 
     const isInQueue = (id: number) => {
-        return user.queue.includes(id)
+        return user.queue.length > 0 ? user?.queue.includes(id) : false;
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,21 +83,21 @@ const Search = () => {
 
     const handleAddToQueue = async (id: number) => {
         const queue = [...user.queue, id]
-        const response = await fetch(`/api/user/${user.username}`, {
-            method: 'POST',
+        const response = await fetch(`/api/users/${user?.username}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ ...user, queue })
         });
         const data = await response.json()
-        setUser({ ...data })
+        setUser(data)
     }
 
     const handleRemoveFromQueue = async (id: number) => {
         const queue = user.queue.filter((item: number) => item != id);
-        const response = await fetch(`/api/user/${user?.username}`, {
-            method: 'POST',
+        const response = await fetch(`/api/users/${user?.username}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -117,8 +117,8 @@ const Search = () => {
             <div className="results">
                 {movies.length > 0 ? movies.map(movie => {
                     return (
-                        <div className="card-container">
-                            <MovieCard movie={movie} showDescription={false} key={movie.id} />
+                        <div className="card-container" key={movie.id}>
+                            <MovieCard movie={movie} showDescription={false} />
                             {isInQueue(movie.id) ? <button type="button" onClick={() => handleRemoveFromQueue(movie.id)}>Remove From Queue</button> :
                                 <button type="button" onClick={() => handleAddToQueue(movie.id)}>Add to Queue</button>
                             }

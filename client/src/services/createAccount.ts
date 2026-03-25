@@ -3,7 +3,7 @@ import Auth from "../utils/auth"
 
 const createAccount = async (accountData: AccountCreationData) => {
     try {
-        const response = await fetch('/api/new', {
+        const response = await fetch('/api/auth/new', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
