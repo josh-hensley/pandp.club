@@ -1,16 +1,22 @@
 export interface IMovie {
     id: number;
     title: string;
-    overview?: string
-    selectedBy?: string 
+    overview?: string;
+    selectedBy?: string;
     poster_path: string;
     release_date: string;
 }
 
+export interface ISelection {
+    movieId: number;
+    selectedBy?: string;
+    comments?: string[];
+}
+
 export interface IPost {
-    title: string,
-    text: string,
-    comments: string[]
+    title: string;
+    text: string;
+    comments: string[];
 }
 
 export interface IQueryResponse {
@@ -32,8 +38,8 @@ export interface IUser {
 }
 
 export interface AccountCreationData {
-    email: string,
-    username: string,
-    password: string,
-    verification: string
+    email: string;
+    username: string;
+    password: string;
+    verification: string;
 }

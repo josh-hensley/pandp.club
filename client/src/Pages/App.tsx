@@ -19,7 +19,7 @@ function App() {
       setMovie({ selectedBy: data.selectedBy, ...movie });
     };
     asyncCall();
-  });
+  }, []);
 
   return (
     <main className="container">
@@ -33,10 +33,7 @@ function App() {
       {movie && <MovieCard movie={movie} showDescription={true} />}
       <div className="flex">
         <button type="button">
-          <a href="/">Join Discussion</a>
-        </button>
-        <button type="button">
-          <a href="/">Past Films</a>
+          <a href="/past">Past Films</a>
         </button>
       </div>
     </main>

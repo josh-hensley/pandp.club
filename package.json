@@ -8,7 +8,7 @@
     "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
     "start": "cd server && npm start",
     "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm start\"",
-    "setFilm": "cd server/dist && npm run setFilm"
+    "setFilm": "cd server && npm run setFilm"
   },
   "keywords": [],
   "author": "",
