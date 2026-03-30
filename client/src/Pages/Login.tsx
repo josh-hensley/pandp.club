@@ -1,10 +1,11 @@
 import { useState } from "react"
 import Auth from "../utils/auth"
-import type { AccountCreationData } from "../Interfaces"
+import type { AccountCreationData, ILoginData } from "../Interfaces"
 import createAccount from "../services/createAccount"
+import { putLogin } from "../services/putLogin"
 
 const Login = () => {
-    const [loginData, setLoginData] = useState({
+    const [loginData, setLoginData] = useState<ILoginData>({
         username: "",
         password: ""
     })
@@ -29,15 +30,8 @@ const Login = () => {
 
     const handleLoginSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const response = await fetch('/api/auth/login', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ ...loginData })
-            });
-        const data = await response.json();
-        Auth.login(data.token)
+        const token = await putLogin(loginData);
+        Auth.login(token)
     }
 
     const handleSignupSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
