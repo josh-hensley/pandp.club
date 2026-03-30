@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { MovieCard } from "../Components";
 import type { IMovie, IUser } from "../Interfaces";
 import { getMovie } from "../services/getMovie";
+import { updateUserQueue } from "../services/updateUserQueue";
 
 const Queue = () => {
   const [movies, setMovies] = useState<IMovie[]>([]);
@@ -43,41 +44,23 @@ const Queue = () => {
     const current = queue.indexOf(movieId);
     const item = queue.splice(current, 1);
     queue.splice(newIndex, 0, item[0]);
-    await fetch(`/api/users/${user?.username}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...user, queue }),
-    });
-    setUser({ ...user, queue });
+    const data = await updateUserQueue(queue)
+    setUser(data);
     setFetched(false);
   };
 
   const handleAddToQueue = async (id: number) => {
     const queue = [...user.queue, id];
-    const response = await fetch(`/api/users/${user?.username}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...user, queue }),
-    });
-    const data = await response.json();
+    const data = await updateUserQueue(queue)
     setUser({ ...data });
+    setFetched(false)
   };
 
   const handleRemoveFromQueue = async (id: number) => {
     const queue = user.queue.filter((item: number) => item != id);
-    const response = await fetch(`/api/users/${user?.username}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...user, queue }),
-    });
-    const data = await response.json();
-    setUser({ ...data });
+    const data = await updateUserQueue(queue)
+    setUser(data);
+    setFetched(false);
   };
 
   return (

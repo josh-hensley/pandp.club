@@ -1,22 +1,14 @@
 import { useEffect, useState } from "react";
 import { MovieCard } from "../Components";
-import type { IMovie, ISelection } from "../Interfaces";
-import { getMovie } from "../services/getMovie";
+import type { IMovie } from "../Interfaces";
+import { getPastFilms } from "../services/getPastFilms";
 
 const Past = () => {
   const [movies, setMovies] = useState<IMovie[]>();
 
   useEffect(() => {
     const asyncCall = async () => {
-      const response = await fetch("/api/films");
-      const data = await response.json();
-      const fetchedMovies = await Promise.all(
-        data.map(async (selection: ISelection): Promise<IMovie> => {
-          const movie = await getMovie(selection.movieId);
-          return { ...movie, selectedBy: selection.selectedBy };
-        }),
-      );
-       setMovies(await fetchedMovies);
+       setMovies(await getPastFilms());
     };
     asyncCall();
   }, []);
