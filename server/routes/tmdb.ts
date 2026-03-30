@@ -25,7 +25,7 @@ router.get('/:id', async (req, res)=>{
 router.get('/', async (req, res)=>{
     const { query } = req.query;
     try {
-        const response = await fetch(`${TMDB_BASE}/movie/${id}`, {
+        const response = await fetch(`${TMDB_BASE}/movie?query=${query}`, {
         method: "GET",
         headers: {
             "content-type": "application/json",
