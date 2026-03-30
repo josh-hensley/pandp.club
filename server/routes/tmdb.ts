@@ -25,17 +25,19 @@ router.get('/:id', async (req, res)=>{
 router.get('/', async (req, res)=>{
     const { query } = req.query;
     try {
-        const response = await fetch(`${TMDB_BASE}/movie/${id}`, {
+        const response = await fetch(`${TMDB_BASE}/search/movie?query=${query}`, {
         method: "GET",
         headers: {
             "content-type": "application/json",
             authorization: `Bearer ${TMDB_KEY}`
         }
     });
-    const movie = await response.json()
-     res.send(movie)
+    const data = await response.json()
+     res.send(data)
         
     } catch (error: unknown) {
         console.error(error instanceof Error ? error.message : String(error))
     }
 })
+
+export default router
