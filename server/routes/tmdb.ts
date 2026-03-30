@@ -39,3 +39,5 @@ router.get('/', async (req, res)=>{
         console.error(error instanceof Error ? error.message : String(error))
     }
 })
+
+export default router
