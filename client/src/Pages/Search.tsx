@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
 import Auth from '../utils/auth';
 import { MovieCard } from '../Components';
-import type { IMovie, IQueryResponse, IPageData, IUser } from '../Interfaces';
-
-const TMDB_KEY = import.meta.env.VITE_TMDB_KEY
+import { getSearchResults } from '../services/getSearchResults';
+import { updateUserQueue } from '../services/updateUserQueue';
+import type { IMovie, IPageData, IUser } from '../Interfaces';
 
 const Search = () => {
     const [search, setSearch] = useState("")
     const [movies, setMovies] = useState<IMovie[]>([])
     const [pageData, setPageData] = useState<IPageData>()
     const [user, setUser] = useState<IUser>({ username: "", queue: [] })
-    const baseUrl = "https://api.themoviedb.org/3/search/movie?query="
 
     useEffect(() => {
         const asyncCall = async () => {
@@ -32,15 +31,7 @@ const Search = () => {
 
     const handleSearch = async (e: React.SubmitEvent) => {
         e.preventDefault();
-        const response = await fetch(`${baseUrl}${search.split(' ').join('%20')}`, {
-            method: "GET",
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${TMDB_KEY}`
-            }
-        });
-        const data: IQueryResponse = await response.json();
-        const { results, total_pages, total_results, page } = data;
+        const { results, total_pages, total_results, page } = await getSearchResults(search.split(' ').join('%20'))
         setMovies(results);
         setPageData({ total_pages, total_results, page })
     }
@@ -48,15 +39,7 @@ const Search = () => {
     const handleNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (pageData) {
-            const response = await fetch(`${baseUrl}${search.split(' ').join('%2')}&page=${pageData.page + 1}`, {
-                method: "GET",
-                headers: {
-                    "content-type": "application/json",
-                    authorization: `Bearer ${TMDB_KEY}`
-                }
-            });
-            const data = await response.json();
-            const { results, total_pages, total_results, page } = data;
+            const { results, total_pages, total_results, page } = await getSearchResults(search.split(' ').join('%20'), pageData.page + 1)
             setMovies(results);
             setPageData({ total_pages, total_results, page })
             location.href = '#'
@@ -66,15 +49,7 @@ const Search = () => {
     const handleBack = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (pageData) {
-            const response = await fetch(`${baseUrl}${search.split(' ').join('%2')}&page=${pageData.page - 1}`, {
-                method: "GET",
-                headers: {
-                    "content-type": "application/json",
-                    authorization: `Bearer ${TMDB_KEY}`
-                }
-            });
-            const data = await response.json();
-            const { results, total_pages, total_results, page } = data;
+            const { results, total_pages, total_results, page } = await getSearchResults(search.split(' ').join('%20'), pageData.page - 1)
             setMovies(results);
             setPageData({ total_pages, total_results, page })
             location.href = '#'
@@ -83,28 +58,14 @@ const Search = () => {
 
     const handleAddToQueue = async (id: number) => {
         const queue = [...user.queue, id]
-        const response = await fetch(`/api/users/${user?.username}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ...user, queue })
-        });
-        const data = await response.json()
+        const data = await updateUserQueue(queue)
         setUser(data)
     }
 
     const handleRemoveFromQueue = async (id: number) => {
         const queue = user.queue.filter((item: number) => item != id);
-        const response = await fetch(`/api/users/${user?.username}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ...user, queue })
-        });
-        const data = await response.json()
-        setUser({ ...data })
+        const data = await updateUserQueue(queue)
+        setUser(data)
     }
 
 
