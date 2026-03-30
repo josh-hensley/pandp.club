@@ -43,3 +43,8 @@ export interface AccountCreationData {
     password: string;
     verification: string;
 }
+
+export interface ILoginData {
+    username: string;
+    password: string;
+}
