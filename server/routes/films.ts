@@ -9,8 +9,8 @@ router.get('/', async (_req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-    const film = await Film.deleteOne({ _id: req.params.id });
-    res.send(`Deleted: ${film.deletedCount}`)
+    const film = await Film.findByIdAndDelete(req.params.id);
+    res.send(`Deleted: ${film}`)
 })
 
 router.get('/current', async (_req, res) => {
